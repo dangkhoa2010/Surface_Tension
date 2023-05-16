@@ -3,13 +3,14 @@ import cv2
 import time
 
 
-def draw_flow(img, flow, step=10):
+def draw_flow(img, flow, step=50):
     h, w = img.shape[:2]
     y, x = np.mgrid[step / 2:h:step, step / 2:w:step].reshape(2, -1).astype(int)
     fx, fy = flow[y, x].T
 
     lines = np.vstack([x, y, x - fx, y - fy]).T.reshape(-1, 2, 2)
     lines = np.int32(lines + 0.5)
+    print(lines)
 
     img_bgr = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     cv2.polylines(img_bgr, lines, 0, (0, 0, 255))
@@ -55,15 +56,11 @@ while True:
 
     # End time
     end = time.time()
-    # calculate the FPS for current frame detection
-    fps = 1 / (end - start)
-
-    # print(f"{fps:.2f} FPS")
 
     cv2.imshow('flow', draw_flow(gray, flow))
     # cv2.imshow('flow HSV', draw_hsv(flow))
 
-    key = cv2.waitKey(5)
+    key = cv2.waitKey(1)
     if key == ord('q'):
         break
 
