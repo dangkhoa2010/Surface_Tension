@@ -5,6 +5,12 @@ def Capture_image():
     # Đọc camera
     cap = cv2.VideoCapture(1)
 
+    width = 1440
+    height = 1080
+
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
     # Kiểm tra xem camera có khả dụng không
     if not cap.isOpened():
         print("Không thể mở camera.")

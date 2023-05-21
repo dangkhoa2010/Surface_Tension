@@ -13,12 +13,12 @@ video_path = "output60.mp4"
 # output_frames_path = "frame/"
 
 
-def save_video(video_path, t=10, fps=30, volume=100, v=25, times=1, write=False):
+def save_video(video_path, t=10, fps=30, volume=100, v=25, d=10, times=1, write=False):
     cap = cv2.VideoCapture(1)
 
     # Thiết lập kích thước khung hình và tốc độ khung hình
-    width = 1280
-    height = 720
+    width = 1440
+    height = 1080
 
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -26,7 +26,7 @@ def save_video(video_path, t=10, fps=30, volume=100, v=25, times=1, write=False)
 
     # Thiết lập codec và tên file video
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video_name = f"output{fps}_nacl_{t}_{volume}ml_v{v}_{times}.mp4"
+    video_name = f"output{fps}_nacl_{t}_{volume}ml_v{v}_d{d}_{times}.mp4"
     path = os.path.join(video_path, video_name)
     out = cv2.VideoWriter(path, fourcc, fps, (width, height))
 
@@ -35,6 +35,22 @@ def save_video(video_path, t=10, fps=30, volume=100, v=25, times=1, write=False)
     frame_count = 0  # Khởi tạo biến đếm số khung hình đã lưu
     while True:
         ret, frame = cap.read()
+        # # Mở file .npy và truy xuất các thông số
+        # calibration_data = np.load('camera_calibration.npy', allow_pickle=True).item()
+        # ret = calibration_data['ret']
+        # cameraMatrix = calibration_data['cameraMatrix']
+        # dist = calibration_data['dist']
+        # rvecs = calibration_data['rvecs']
+        # tvecs = calibration_data['tvecs']
+        #
+        # h, w = frame.shape[:2]
+        # newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(cameraMatrix, dist, (w, h), 1, (w, h))
+        #
+        # frame = cv2.undistort(frame, cameraMatrix, dist, None, newCameraMatrix)
+        #
+        # # crop the image
+        # x, y, w, h = roi
+        # frame = frame[y:y + h, x:x + w]
 
         if write:
             if ret:
@@ -334,7 +350,7 @@ def compute_mse(img_path, img_dir):
 
 def main():
     # video_path = "C:\\Users\\LEGION\\OneDrive\\Documents\\Study\\Square_Lab\\Surface_Tension"
-    fps, volume, v, total_time, times = save_video(video_path, t=10, fps=60, volume=100, v=30, write=False, times=1)
+    # fps, volume, v, total_time, times = save_video(video_path, t=10, fps=60, volume=100, v=30, d=10, write=False, times=1)
     # # Tạo tên file mới với thời gian ghi video
     # new_file_name = f"output{fps}_nacl_{volume}ml_v{v}_{total_time:.2f}s_{times}.mp4"
     #
@@ -348,6 +364,8 @@ def main():
     # export_frames("output30.mp4", "output30")
     # path = "output60_h2o_10_75ml_v20_3"
     # compute_mse(path + "/frame_17.jpg", path)
+    export_frames("output60_nacl_10_100ml_v15_d10_5_(1).mp4", "v15_d10_5_(1)")
+    # export_frames("video.mp4", "video")
 
 
 if __name__ == "__main__":
